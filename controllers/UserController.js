@@ -1,5 +1,5 @@
-const { default: knex } = require("knex");
 const User = require("../models/User");
+const PasswordToken = require("../models/PasswordToken");
 
 class UserController {
   async index(req, res) {
@@ -58,6 +58,17 @@ class UserController {
       res.status(200).json("Tudo Ok!");
     }else{
       res.status(406).json(result.err);
+    }
+  }
+
+  async recoveryPassword(req, res){
+    const email = req.body.email;
+
+    const result = await PasswordToken.create(email);
+    if(result.status){
+      
+    }else{
+      res.status(406).json(result.err)
     }
   }
 }
