@@ -66,9 +66,22 @@ class UserController {
 
     const result = await PasswordToken.create(email);
     if(result.status){
-      
+      res.status(200).json("" + result.token);
     }else{
-      res.status(406).json(result.err)
+      res.status(406).json("" + result.err);
+    }
+  }
+
+  async changePassword(req, res){
+    const token = req.body.token;
+    const password = req.body.token;
+
+    const isTokenValid = await PasswordToken.validate(token);
+    if(isTokenValid.status){
+      await User.changePassword(password, isTokenValid.token.user_id, isTokenValid.token.token);
+      return res.status(200).json({message: "Senha alterada com sucesso!"});
+    }else{
+      return res.status(406).json({message: "Token inválido!"});
     }
   }
 }
